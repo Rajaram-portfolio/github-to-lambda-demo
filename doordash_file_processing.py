@@ -15,14 +15,16 @@ def lambda_handler(event, context):
     try:
         #Getting bucket name
         bucket  = event['Records'][0]['s3']['bucket']['name']
+        print(bucket)
         #Getting s3 filename
         s3_file = event['Records'][0]['s3']['object']['key'] 
+        print(s3_file)
         #Reading the s3 file using bucket and key
         resp = s3_client.get_object(Bucket=bucket, Key=s3_file)        
         #Reading the file content as json
-        json_Df = pd.read_json(resp['Body'])       
+        df = pd.read_csv(resp['Body'])       
         #Filetering the records with status as delivered
-        result_df=json_Df[json_Df['status'] == 'delivered']
+        result_df=df[df['status'] == 'delivered']
         #writing the filetered df as json file into s3 bucket
         print(result_df)
         # json_buffer = io.StringIO()
