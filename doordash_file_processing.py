@@ -24,7 +24,7 @@ def lambda_handler(event, context):
         #Reading the file content as json
         df = pd.read_csv(resp['Body'])       
         #Filetering the records with status as delivered
-        result_df=df[df['status'] == 'delivered']
+        result_df=df['status'] == 'delivered'
         #writing the filetered df as json file into s3 bucket
         print(result_df)
         # json_buffer = io.StringIO()
