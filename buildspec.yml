@@ -12,11 +12,11 @@ phases:
       - cd lib
       - zip -r9 ../deployment_package.zip .
       - cd ..
-      - zip -g deployment_package.zip lambda_function.py
+      - zip -g deployment_package.zip doordash_file_processing.py
   post_build:
     commands:
       - echo "Uploading to S3..."
-      - aws s3 cp deployment_package.zip s3://lambda-cicd-builds-zip/
+      - aws s3 cp deployment_package.zip s3://doordash-deployment-zip/
       - echo "Updating Lambda function via S3..."
-      - aws lambda update-function-code --function-name github-to-lambda-cicd --s3-bucket lambda-cicd-builds-zip --s3-key deployment_package.zip
+      - aws lambda update-function-code --function-name doordash_file_process --s3-bucket doordash-deployment-zip --s3-key deployment_package.zip
       - echo "Deployment complete!"
