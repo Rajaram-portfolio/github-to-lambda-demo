@@ -24,11 +24,12 @@ def lambda_handler(event, context):
         #Filetering the records with status as delivered
         result_df=json_Df[json_Df['status'] == 'delivered']
         #writing the filetered df as json file into s3 bucket
-        json_buffer = io.StringIO()
-        result_df.to_json(json_buffer)        
-        tgt_bucket = s3_client.Bucket('doordash-target-zon')
-        destination = "output_" + str(datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')) + '.json'
-        tgt_bucket.put_object(Key=destination, Body=json_buffer.getvalue())
+        print(result_df)
+        # json_buffer = io.StringIO()
+        # result_df.to_json(json_buffer)        
+        # tgt_bucket = s3_client.Bucket('doordash-target-zon')
+        # destination = "output_" + str(datetime.datetime.now().strftime('%Y_%m_%d_%H_%M_%S')) + '.json'
+        # tgt_bucket.put_object(Key=destination, Body=json_buffer.getvalue())
         #sending success alert mail
         message = "DoorDash {} file has been processed successfully !!".format("s3://"+bucket+"/"+s3_file)
         success_alert = sns_client.publish(Subject="SUCCESS - Daily data processing",TargetArn=sns_arn,Message=message,MessageStructure='text')
