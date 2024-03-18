@@ -33,10 +33,11 @@ def lambda_handler(event, context):
         
         #Filetering the records with status as delivered
         result_df=df[df['status'] == 'delivered']
-        
+        print(result_df)
         #writing the filetered df as json file into s3 bucket
         df1=result_df.to_json()
-        s3_client.put_object(Body=df1, Bucket=target_s3,Key='output.json')
+        target_file = s3_file[:16]
+        s3_client.put_object(Body=df1, Bucket=target_s3,Key=target_file+"output".json)
         #sending success alert mail
         message = "DoorDash {} file has been processed successfully !!".format("s3://"+bucket+"/"+s3_file)
         success_alert = sns_client.publish(Subject="SUCCESS - Daily data processing",TargetArn=sns_arn,Message=message,MessageStructure='text')
